@@ -1,0 +1,7 @@
+---
+processes:
+- name: garbd
+  executable: /var/vcap/packages/mariadb/bin/garbd
+  args:
+  - --cfg
+  - /var/vcap/jobs/arbitrator/config/garbd_config

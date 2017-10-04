@@ -1,0 +1,17 @@
+---
+processes:
+- name: cf-mysql-broker
+  executable: /var/vcap/jobs/cf-mysql-broker/bin/cf-mysql-broker
+  env:
+    BUNDLE_GEMFILE: /var/vcap/packages/cf-mysql-broker/Gemfile
+    RAILS_ENV: production
+    SETTINGS_PATH: /var/vcap/jobs/cf-mysql-broker/config/settings.yml
+    HOME: /home/vcap
+    JOB_INDEX: <%= index %>
+- name: quota-enforcer
+  executable: /var/vcap/packages/cf-mysql-broker/bin/cf-mysql-quota-enforcer
+  args:
+  - --pidFile
+  - /var/vcap/data/cf-mysql-broker/tmp/quota-enforcer.pid
+  - --configPath
+  - /var/vcap/jobs/cf-mysql-broker/config/quota_enforcer_config.yml

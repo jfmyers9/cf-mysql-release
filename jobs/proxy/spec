@@ -2,8 +2,7 @@
 name: proxy
 
 templates:
-  switchboard_ctl.erb: bin/switchboard_ctl
-  syslog_forwarder.conf.erb: config/syslog_forwarder.conf
+  bpm.yml.erb: config/bpm.yml
   switchboard.yml.erb: config/switchboard.yml
   post-start.erb: bin/post-start
 

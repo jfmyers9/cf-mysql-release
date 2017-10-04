@@ -15,7 +15,7 @@ Monit:
   MysqlStateFilePath: '/var/vcap/store/mysql/state.txt'
   ServiceName: 'mariadb_ctrl'
   BootstrapFilePath: '/var/vcap/jobs/mysql/bin/pre-start-execution'
-  BootstrapLogFilePath: '/var/vcap/sys/log/galera-healthcheck/pre-start-execution-during-bootstrap.stdout.log'
+  BootstrapLogFilePath: '/var/vcap/sys/log/mysql/galera-healthcheck-pre-start-execution-during-bootstrap.stdout.log'
 SidecarEndpoint:
   Username: <%= p('cf_mysql.mysql.galera_healthcheck.endpoint_username') %>
   Password: <%= p('cf_mysql.mysql.galera_healthcheck.endpoint_password') %>

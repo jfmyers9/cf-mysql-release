@@ -31,6 +31,8 @@ var pidfile = flag.String(
 func main() {
 	flag.Parse()
 
+	fmt.Printf("PATH: %s\n\n", os.Getenv("PATH"))
+
 	err := ioutil.WriteFile(*pidfile, []byte(strconv.Itoa(os.Getpid())), 0644)
 	if err != nil {
 		panic(err)

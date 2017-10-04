@@ -1,5 +1,5 @@
 check process switchboard
-  with pidfile /var/vcap/sys/run/proxy/switchboard.pid
-  start program "/var/vcap/jobs/proxy/bin/switchboard_ctl start" with timeout 10 seconds
-  stop program "/var/vcap/jobs/proxy/bin/switchboard_ctl stop" with timeout <%= p('cf_mysql.proxy.shutdown_delay').to_i + 30 %> seconds
+  with pidfile /var/vcap/sys/run/bpm/proxy/switchboard.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start proxy -p switchboard"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop proxy -p switchboard" with timeout <%= p('cf_mysql.proxy.shutdown_delay').to_i + 30 %> seconds
   group vcap

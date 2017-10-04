@@ -1,0 +1,37 @@
+#!/bin/bash -e
+
+export PATH=/var/vcap/packages/ruby/bin:$PATH
+export PATH=/var/vcap/packages/mariadb/bin:$PATH
+
+# Run the migrations only on the first node
+if [ $JOB_INDEX -eq 0 ]; then
+  pushd $PACKAGE_DIR
+    # TODO: This will break. `/var/vcap/packages` is `ro` in BPM
+    # Needed because rake db:migrate attempts to rewrite schema.rb file
+    # which is currently owned by root
+    # Create DB and run migrations
+    set +e
+    bundle exec rake db:create
+    bundle exec rake db:migrate
+    EXIT_STATUS=$?
+    set -e
+
+    if [ $EXIT_STATUS != 0 ]; then
+      echo "Migrations failed at $(date)"
+      exit 1
+    fi
+
+    # Sync size of existing service instances to match plans in manifest
+    set +e
+    bundle exec rake broker:sync_plans_in_db
+    EXIT_STATUS=$?
+    set -e
+
+    if [ $EXIT_STATUS != 0 ]; then
+      echo "Failed to sync broker plans at $(date)"
+      exit 1
+    fi
+  popd
+fi
+
+bundle exec unicorn -c /var/vcap/jobs/cf-mysql-broker/config/unicorn.conf.rb

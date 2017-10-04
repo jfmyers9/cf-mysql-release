@@ -2,22 +2,20 @@
 name: mysql
 
 templates:
+  bpm.yml.erb: config/bpm.yml
+  mariadb_ctrl.erb: bin/mariadb_ctrl
   disable_mysql_cli_history.sh.erb: config/disable_mysql_cli_history.sh
   drain.sh: bin/drain
-  mariadb_ctl.erb: bin/mariadb_ctl
   my.cnf.erb: config/my.cnf
   mylogin.cnf.erb: config/mylogin.cnf
   mariadb_ctl_config.yml.erb: config/mariadb_ctl_config.yml
   mariadb_init.erb: config/mariadb_init
   galera-healthcheck_ctl.erb: bin/galera-healthcheck_ctl
-  galera_healthcheck_config.yaml.erb: config/galera_healthcheck_config.yaml
+  galera_healthcheck_config.yml.erb: config/galera_healthcheck_config.yml
   galera_healthcheck_setup.sql.erb: config/galera_healthcheck_setup.sql
-  gra-log-purger_ctl.erb: bin/gra-log-purger_ctl
   gra-log-purger.sh.erb: bin/gra-log-purger.sh
-  syslog_forwarder.conf.erb: config/syslog_forwarder.conf
   pre-start-setup.erb: bin/pre-start
   pre-start-execution.erb: bin/pre-start-execution
-  cluster_health_logger_ctl.erb: bin/cluster_health_logger_ctl
   cluster_health_logger_config.yml.erb: config/cluster_health_logger_config.yml
   cluster_health_logger_setup.sql.erb: config/cluster_health_logger_setup.sql
   mysql_audit_logs.logrotate.erb: config/mysql_audit_logs.logrotate
@@ -31,7 +29,6 @@ packages:
 - gra-log-purger
 - cf-mysql-common
 - cf-mysql-cluster-health-logger
-- syslog_aggregator
 - generate-auto-tune-mysql
 
 consumes:
@@ -54,14 +51,6 @@ provides:
   type: internal-database
 
 properties:
-  syslog_aggregator.address:
-    description: "IP address for syslog aggregator"
-  syslog_aggregator.port:
-    description: "TCP port of syslog aggregator"
-  syslog_aggregator.transport:
-    description: "Transport to be used when forwarding logs (tcp|udp|relp)."
-    default: "tcp"
-
   cf_mysql.mysql.admin_username:
     description: 'Username for the MySQL server admin user'
     default: 'root'

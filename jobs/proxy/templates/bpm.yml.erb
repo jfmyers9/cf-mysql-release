@@ -1,0 +1,12 @@
+---
+processes:
+- name: switchboard
+  executable: /var/vcap/packages/switchboard/bin/switchboard
+  args:
+  - --configPath
+  - /var/vcap/jobs/proxy/config/switchboard.yml
+  - --logLevel
+  - info
+  workdir: /var/vcap/packages/switchboard
+  limits:
+    open_files: <%= p('cf_mysql.proxy.max_open_files') %>

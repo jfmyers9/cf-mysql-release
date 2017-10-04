@@ -1,0 +1,38 @@
+---
+processes:
+- name: mariadb_ctrl
+  executable: /var/vcap/jobs/mysql/bin/mariadb_ctrl
+  env:
+    MARIADB_JOB_DIR: /var/vcap/jobs/mysql
+    <% if p('cf_mysql.mysql.disable_auto_sst') %>
+    DISABLE_SST: 1
+    <% else %>
+    DISABLE_SST: 0
+    <% end %>
+    <% if_p('cf_mysql.mysql.interrupt_notify_cmd') do |cmd| %>
+    INTERRUPT_NOTIFY_CMD: <%= "'#{p('cf_mysql.mysql.interrupt_notify_cmd')}'" %>
+    <% end %>
+  workdir: /var/vcap/packages/mariadb_ctrl
+  persistent_disk: true
+  ephemeral_disk: true
+  limits:
+    open_files: <%= p('cf_mysql.mysql.max_open_files') %>
+- name: gra-log-purger
+  executable: /var/vcap/packages/gra-log-purger/gra-log-purger-executable
+  args:
+  - --graLogDir
+  - /var/vcap/store/mysql
+  - --graLogDaysToKeep
+  - 30
+  - --pidfile
+  - /var/vcap/data/mysql/tmp/gra-log-purger.pid
+  env:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+  workdir: /var/vcap/packages/gra-log-purger
+  persistent_disk: true
+  ephemeral_disk: true
+- name: cluster_health_logger
+  executable: /var/vcap/packages/cf-mysql-cluster-health-logger/bin/cf-mysql-cluster-health-logger
+  args:
+  - --configPath
+  - /var/vcap/jobs/mysql/config/cluster_health_logger_config.yml

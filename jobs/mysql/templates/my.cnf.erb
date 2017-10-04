@@ -1,5 +1,5 @@
 <%
-  base_folder = '/var/vcap/sys/run/mysql'
+  base_folder = '/var/vcap/data/mysql/tmp'
 
   cluster_ips = link('mysql').instances.map { |instance| instance.address }
   if_link('arbitrator') do
@@ -42,6 +42,7 @@ socket                          = <%= "#{base_folder}/mysqld.sock" %>
 
 [mysqld_safe]
 nice                            = 0
+log_error                       = /var/vcap/sys/log/mysql/mysqld_safe.err.log
 
 !include                        /var/vcap/jobs/mysql/config/auto-tune.cnf
 
@@ -75,7 +76,7 @@ basedir                         = /var/vcap/packages/mariadb
 datadir                         = /var/vcap/store/mysql
 tmpdir                          = /var/vcap/data/mysql/tmp
 language                        = /var/vcap/packages/mariadb/share/english
-pid-file                        = /var/vcap/sys/run/mysql/mysql.pid
+pid-file                        = /var/vcap/data/mysql/tmp/mysql.pid
 log_error                       = /var/vcap/sys/log/mysql/mysql.err.log
 init_file                       = /var/vcap/jobs/mysql/config/mariadb_init
 skip_external_locking           = TRUE
@@ -141,7 +142,7 @@ plugin-load                     = server_audit=server_audit.so
 server_audit_logging            = ON
 server_audit_events             = <%= server_audit_events %>
 server_audit_output_type        = file
-server_audit_file_path          = /var/vcap/store/mysql_audit_logs/mysql_server_audit.log
+server_audit_file_path          = /var/vcap/store/mysql/mysql_audit_logs/mysql_server_audit.log
 server_audit_excl_users         = <%= excluded_audit_users.join(',') %>
 server_audit_file_rotations     = 0
 <% end %>

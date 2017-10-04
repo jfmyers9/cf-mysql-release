@@ -1,0 +1,13 @@
+#!/bin/bash -e
+
+export PATH=$PATH:/var/vcap/packages/xtrabackup/bin
+export PERL5LIB=$PERL5LIB:/var/vcap/packages/xtrabackup/lib/perl/5.18.2
+
+/var/vcap/packages/mariadb_ctrl/bin/mariadb_ctrl \
+  -configPath=/var/vcap/jobs/mysql/config/mariadb_ctl_config.yml
+
+echo "Waiting on that mysql pid Yo"
+while kill -0 $(cat /var/vcap/data/mysql/tmp/mariadb_ctl.pid); do
+  sleep 5
+done
+echo "Oh No Mysql Exited"

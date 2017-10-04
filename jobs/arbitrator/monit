@@ -1,7 +1,7 @@
 check process garbd
-  with pidfile /var/vcap/sys/run/garbd/garbd.pid
-  start program "/var/vcap/jobs/arbitrator/bin/garbd_ctl start" with timeout 60 seconds
-  stop program "/var/vcap/jobs/arbitrator/bin/garbd_ctl stop" with timeout 10 seconds
+  with pidfile /var/vcap/sys/run/bpm/arbitrator/garbd.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start arbitrator -p garbd" with timeout 60 seconds
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop arbitrartor -p garbd"
   group vcap
 
 check process galera-healthcheck
